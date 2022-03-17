@@ -1,4 +1,4 @@
-public class PV {
+public class PV extends LVMSystem {
     // Each physical volume (PV) has only one associated physical hard drive, and a user provided name.
     // Each PV also has a UUID (Universally Unique Identifier) that is generated whenever a PV is created.
     // A PV can only be created with an associated hard drive.
@@ -6,6 +6,5 @@ public class PV {
     // A physical hard drive can only belong to one physical volume.
     // Name, UUID, and associated hard drive of each PV.
     // You should also be able to get the size of a PV by checking its hard drive.
-
 
 }

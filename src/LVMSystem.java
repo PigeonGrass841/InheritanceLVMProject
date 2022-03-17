@@ -4,10 +4,16 @@ public class LVMSystem {
     private String name;
     private String UUIDs;
 
-    public LVMSystem(String name)
+    public LVMSystem (String name)
     {
         this.name = name;
         this.UUIDs = (UUID.randomUUID()).toString();
+
+    }
+
+    public String getName()
+    {
+        return this.name;
     }
 
     public String getUUID()
