@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class VG extends LVMSystem {
     // Volume Groups (VGs) also have a UUID and a user provided name.
     // VGs consist of a list of physical volumes, and a list of Logical Volumes.
@@ -5,24 +7,37 @@ public class VG extends LVMSystem {
     // You should also be able to compute how much free space is left on a VG by looking at how big each Logical Volume is and subtracting that from the total PV space.
     // Name, UUID, size, and associated VG for a specific LV
 
-    private PV[] listOfPVs;
-    private LV[] listOfLVs;
+    private ArrayList<PV> listOfPVs;
+    private ArrayList<LV> listOfLVs;
+    private int size;
 
-
-    public VG (String name, PV[] listOfPVs, LV[] listOfLVs)
+    public VG (String name, ArrayList<PV> listOfPVs, ArrayList<LV> listOfLVs)
     {
         super(name);
         this.listOfPVs = listOfPVs;
         this.listOfLVs = listOfLVs;
+        this.size = 0;
 
         for (PV volume : listOfPVs)
         {
-            size += volume.getSize();
+            this.size += volume.getSize();
         }
     }
 
     public int totalFreeSpace()
     {
+        int totalFreeSpace = 0;
 
+        for (LV volume : listOfLVs)
+        {
+            totalFreeSpace += volume.getSize();
+        }
+
+        for (PV volume : listOfPVs)
+        {
+            totalFreeSpace -= volume.getSize();
+        }
+
+        return totalFreeSpace;
     }
 }

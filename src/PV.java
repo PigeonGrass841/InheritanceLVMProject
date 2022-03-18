@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class PV extends LVMSystem {
     // Each physical volume (PV) has only one associated physical hard drive, and a user provided name.
     // Each PV also has a UUID (Universally Unique Identifier) that is generated whenever a PV is created.
@@ -7,4 +9,13 @@ public class PV extends LVMSystem {
     // Name, UUID, and associated hard drive of each PV.
     // You should also be able to get the size of a PV by checking its hard drive.
 
+    private PHD hardDrive;
+    private int size;
+
+    public PV(String name, PHD hardDrive)
+    {
+        super(name);
+        this.hardDrive = hardDrive;
+        this.size = hardDrive.getSize();
+    }
 }

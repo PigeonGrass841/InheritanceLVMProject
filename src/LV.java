@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class LV extends LVMSystem {
     // Each Logical Volume (LV) has a size, UUID, user provided name, and an associated volume group.
     // A logical volume CANNOT exist without an associated volume group.
@@ -5,15 +7,16 @@ public class LV extends LVMSystem {
     // Name, UUID, list of PVs, and a list of LVs for a Volume Group.
     // You should also be able to get the total VG size and the total free space.
 
-    private PV[] listOfPVs;
+    private ArrayList<PV> listOfPVs;
+    private ArrayList<LV> listOfLVs;
 
-    public LV (String name, PV[] listOfPVs)
+    public LV (String name, ArrayList<PV> listOfPVs)
     {
         super(name);
         this.listOfPVs = listOfPVs;
     }
 
-    public PV[] getListOfPVs()
+    public ArrayList<PV> getListOfPVs()
     {
         return this.listOfPVs;
     }
