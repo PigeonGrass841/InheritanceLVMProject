@@ -27,6 +27,11 @@ public class Main {
         System.out.println("-------------------------");
         System.out.println("Welcome to the LVM System! Enter your commands: ");
 
+        ArrayList<PHD> hardDrives = new ArrayList<PHD>();
+        ArrayList<PV> PVs = new ArrayList<PV>();
+        ArrayList<VG> VGs = new ArrayList<VG>();
+
+
         Scanner input = new Scanner(System.in);
         String command = input.nextLine();
 
@@ -36,6 +41,11 @@ public class Main {
             String driveName = info.substring(0, command.indexOf(" ") + 1);
             int size = Integer.parseInt(info.substring(command.indexOf(" ") + 1));
             PHD physical = new PHD(driveName, size);
+        }
+
+        if (command.indexOf("pvcreate ") != -1)
+        {
+
         }
     }
 }
