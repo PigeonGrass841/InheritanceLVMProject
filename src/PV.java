@@ -10,7 +10,7 @@ public class PV extends LVMSystem {
     // You should also be able to get the size of a PV by checking its hard drive.
 
     private PHD hardDrive;
-    private int size;
+    private String size;
 
     public PV(String name, PHD hardDrive)
     {

@@ -9,14 +9,14 @@ public class VG extends LVMSystem {
 
     private ArrayList<PV> listOfPVs;
     private ArrayList<LV> listOfLVs;
-    private int size;
+    private String size;
 
     public VG (String name, ArrayList<PV> listOfPVs, ArrayList<LV> listOfLVs)
     {
         super(name);
         this.listOfPVs = listOfPVs;
         this.listOfLVs = listOfLVs;
-        this.size = 0;
+        this.size = "";
 
         for (PV volume : listOfPVs)
         {
@@ -24,20 +24,20 @@ public class VG extends LVMSystem {
         }
     }
 
-    public int totalFreeSpace()
+    public String totalFreeSpace()
     {
         int totalFreeSpace = 0;
 
         for (LV volume : listOfLVs)
         {
-            totalFreeSpace += volume.getSize();
+            totalFreeSpace += Integer.parseInt(volume.getSize());
         }
 
         for (PV volume : listOfPVs)
         {
-            totalFreeSpace -= volume.getSize();
+            totalFreeSpace -= Integer.parseInt(volume.getSize());
         }
 
-        return totalFreeSpace;
+        return totalFreeSpace + "G";
     }
 }

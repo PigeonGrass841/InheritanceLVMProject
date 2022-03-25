@@ -3,13 +3,13 @@ import java.util.ArrayList;
 public class LVMSystem {
     private String name;
     private String UUIDs;
-    private int size;
+    private String size;
 
     public LVMSystem (String name)
     {
         this.name = name;
         this.UUIDs = (UUID.randomUUID()).toString();
-        this.size = 0;
+        this.size = "";
     }
 
     public String getName()
@@ -22,7 +22,7 @@ public class LVMSystem {
         return this.UUIDs;
     }
 
-    public int getSize()
+    public String getSize()
     {
         return this.size;
     }
