@@ -2,14 +2,15 @@ import java.util.UUID;
 import java.util.ArrayList;
 public class LVMSystem {
     private String name;
-    private String UUIDs;
-    private String size;
+    private int size;
+    private String UUIDName;
 
-    public LVMSystem (String name)
+    public LVMSystem (String name, int size)
     {
         this.name = name;
-        this.UUIDs = (UUID.randomUUID()).toString();
-        this.size = "";
+        this.size = size;
+        this.UUIDName = (UUID.randomUUID()).toString();
+
     }
 
     public String getName()
@@ -17,13 +18,13 @@ public class LVMSystem {
         return this.name;
     }
 
-    public String getUUID()
-    {
-        return this.UUIDs;
-    }
-
-    public String getSize()
+    public int getSize()
     {
         return this.size;
+    }
+
+    public String getUUID()
+    {
+        return this.UUIDName;
     }
 }

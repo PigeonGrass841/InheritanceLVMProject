@@ -19,18 +19,74 @@ public class Main {
         System.out.println("Welcome to the LVM System! Enter your commands: ");
         System.out.print("cmd# ");
 
+        ArrayList<HardDrive> hardDrives = new ArrayList<HardDrive>();
+
         Scanner input = new Scanner(System.in);
         String command = input.nextLine();
 
         while (!(command.equals("exit")))
         {
-            if (command.indexOf("install-drive ") != -1) {
+            // This command will install a new hard drive with the name "sda" of size 100G
+            // You should not allow the user to install a drive that is already installed.
+            if (command.indexOf("install-drive ") != -1)
+            {
+                boolean exists = false;
+                String info = command.substring(command.indexOf(" ") + 1);
+                String driveName = info.substring(0, info.indexOf(" "));
+                String driveSize = info.substring(info.indexOf(" ") + 1);
+
+                for (HardDrive hd : hardDrives)
+                {
+                    if (hd.getName().equals(driveName))
+                    {
+                        System.out.println("That hard-drive already exists.");
+                        exists = true;
+                        break;
+                    }
+                }
+
+                if (exists == false)
+                {
+                    HardDrive drive = new HardDrive(driveName, Integer.parseInt(driveSize));
+                    hardDrives.add(drive);
+                    System.out.println("Drive " + driveName + " installed");
+                }
+
             }
 
-            if (command.indexOf("pvcreate ") != -1) {
+            if (command.indexOf("pvcreate ") != -1)
+            {
+
             }
 
-            if (command.indexOf("pvlist") != -1) {
+            if (command.indexOf("pvlist") != -1)
+            {
+
+            }
+
+            if (command.indexOf("vgcreate ") != -1)
+            {
+
+            }
+
+            if (command.indexOf("vgextend ") != -1)
+            {
+
+            }
+
+            if (command.indexOf("vglist") != -1)
+            {
+
+            }
+
+            if (command.indexOf("lvcreate ") != -1)
+            {
+
+            }
+
+            if (command.indexOf("lvlist") != -1)
+            {
+
             }
 
             System.out.print("cmd# ");
