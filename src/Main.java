@@ -19,38 +19,18 @@ public class Main {
         System.out.println("Welcome to the LVM System! Enter your commands: ");
         System.out.print("cmd# ");
 
-        ArrayList<PHD> hardDrives = new ArrayList<PHD>();
-        ArrayList<PV> pv = new ArrayList<PV>();
-        ArrayList<VG> vg = new ArrayList<VG>();
-
-
         Scanner input = new Scanner(System.in);
         String command = input.nextLine();
 
         while (!(command.equals("exit")))
         {
             if (command.indexOf("install-drive ") != -1) {
-                String info = command.substring(command.indexOf(" ") + 1);
-                String driveName = info.substring(0, info.indexOf(" ") + 1);
-                String size = info.substring(info.indexOf(" ") + 1);
-                PHD hardDrive = new PHD(driveName, size);
-                hardDrives.add(hardDrive);
-                System.out.println("Drive " + driveName + "installed");
             }
 
             if (command.indexOf("pvcreate ") != -1) {
-                String info = command.substring(command.indexOf(" ") + 1);
-                String physicalName = info.substring(0, info.indexOf(" ") + 1);
-                String driveName = info.substring(info.indexOf(" ") + 1);
-                PV physical = new PV(physicalName, hardDrives.get(hardDrives.indexOf(driveName)));
-                System.out.println(physicalName + " created");
             }
 
             if (command.indexOf("pvlist") != -1) {
-                for (PV physical : pv)
-                {
-                    System.out.println(physical.getName() + ": [" + physical.getSize() + "] ");
-                }
             }
 
             System.out.print("cmd# ");
