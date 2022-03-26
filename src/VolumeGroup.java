@@ -13,18 +13,20 @@ public class VolumeGroup extends LVMSystem {
 
     public VolumeGroup (String name, ArrayList<PhysicalVolume> pvList, ArrayList<LogicalVolume> lvList)
     {
-        super(name, 0);
+        super(name);
         this.pvList = pvList;
         this.lvList = lvList;
+
         for (PhysicalVolume pv : pvList)
         {
             size += pv.getSize();
         }
+
         for (LogicalVolume lv : lvList)
         {
             this.freeSpace += lv.getSize();
-
         }
+
         this.freeSpace = this.freeSpace - size;
     }
 
@@ -41,5 +43,10 @@ public class VolumeGroup extends LVMSystem {
     public int getFreeSpace()
     {
         return this.freeSpace;
+    }
+
+    public int getSize()
+    {
+        return this.size;
     }
 }

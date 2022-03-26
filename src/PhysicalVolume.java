@@ -6,14 +6,19 @@
 public class PhysicalVolume extends LVMSystem {
     private HardDrive hardDrive;
 
-    public PhysicalVolume (String name, int size, HardDrive hardDrive)
+    public PhysicalVolume (String name, HardDrive hardDrive)
     {
-        super(name, size);
+        super(name);
         this.hardDrive = hardDrive;
     }
 
     public HardDrive getHardDrive()
     {
         return this.hardDrive;
+    }
+
+    public int getSize()
+    {
+        return hardDrive.getSize();
     }
 }
