@@ -22,6 +22,8 @@ public class Main {
 
         ArrayList<HardDrive> hardDrives = new ArrayList<HardDrive>();
         ArrayList<PhysicalVolume> physicalVolumes = new ArrayList<PhysicalVolume>();
+        ArrayList<VolumeGroup> volumeGroups = new ArrayList<VolumeGroup>();
+        ArrayList<LogicalVolume> logicalVolumes = new ArrayList<LogicalVolume>();
 
         Scanner input = new Scanner(System.in);
         String command = input.nextLine();
@@ -46,7 +48,7 @@ public class Main {
                 {
                     if (hd.getName().equals(driveName))
                     {
-                        System.out.println("That hard-drive already exists.");
+                        System.out.println("That hard-drive already exists");
                         error = true;
                         break;
                     }
@@ -83,12 +85,6 @@ public class Main {
                 String driveName = info.substring(info.indexOf(" ") + 1);
                 HardDrive drive = null;
 
-                if (hardDrives.size() == 0)
-                {
-                    System.out.println("That hard-drive doesn't exist.");
-                    error = true;
-                }
-
                 for (HardDrive hd : hardDrives)
                 {
                     if (hd.getName().equals(driveName))
@@ -98,9 +94,9 @@ public class Main {
                     }
                 }
 
-                if (drive == null)
+                if (hardDrives.size() == 0 || drive == null)
                 {
-                    System.out.println("That hard-drive doesn't exist.");
+                    System.out.println("That hard-drive doesn't exist");
                     error = true;
                 }
 
@@ -110,12 +106,14 @@ public class Main {
                     {
                         System.out.println("That hard-drive is already associated with a created physical volume");
                         error = true;
+                        break;
                     }
 
                     if (pv.getName().equals(physicalName))
                     {
                         System.out.println("That physical volume already exists");
                         error = true;
+                        break;
                     }
                 }
 
@@ -127,21 +125,152 @@ public class Main {
                 }
             }
 
+            // This command will list all of the information about physical volumes (sorted by volume group) in this format:
+            // pv1:[100G] [vg1] [uuid]
+            // This denotes that pv1 is 100G and part of Volume Group vg1.
+            // If the PV is not part of a volume group yet, do not display the VG information.
             if (command.indexOf("pvlist") != -1)
             {
+                for (PhysicalVolume pv : physicalVolumes)
+                {
+                    System.out.print(pv.getName() + " [" + pv.getSize() + "G]");
 
+                    for (VolumeGroup vg : volumeGroups)
+                    {
+                        for (PhysicalVolume pv1 : vg.getPVList())
+                        {
+                            if (pv1.equals(pv))
+                            {
+                                System.out.print(" [" + vg.getName() + "]");
+                            }
+                        }
+                    }
+
+                    System.out.println(" [" + pv.getUUID() + "]");
+                }
             }
 
+            // This command will create a new volume group named "vg1" with the physical volume "pv1"
+            // This should report an error if the pv specified doesn't exist or is part of another VG.
+            // It should also report an error if the VG name already exists.
             if (command.indexOf("vgcreate ") != -1)
             {
+                boolean error = false;
+                String info = command.substring(command.indexOf(" ") + 1);
+                String volumeName = info.substring(0, info.indexOf(" "));
+                String physicalName = info.substring(info.indexOf(" ") + 1);
+                PhysicalVolume volume = null;
 
+                for (PhysicalVolume pv : physicalVolumes)
+                {
+                    if (pv.getName().equals(physicalName))
+                    {
+                        volume = pv;
+                        break;
+                    }
+                }
+
+                if (physicalVolumes.size() == 0 || volume == null)
+                {
+                    System.out.println("That physical volume doesn't exist");
+                    error = true;
+                }
+
+                for (VolumeGroup vg : volumeGroups)
+                {
+                    if (vg.getName().equals(volumeName))
+                    {
+                        System.out.println("That volume group already exists");
+                        error = true;
+                        break;
+                    }
+
+                    for (PhysicalVolume pv : vg.getPVList())
+                    {
+                        if (pv.getName().equals(physicalName))
+                        {
+                            System.out.println("That physical volume is already associated with a created volume group");
+                            error = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (error == false)
+                {
+                    VolumeGroup group = new VolumeGroup(volumeName, volume);
+                    volumeGroups.add(group);
+                    System.out.println(volumeName + " created");
+                }
             }
 
+            // This command will add physical volume "pv2" to "vg1"
+            // This should report an error if the vg or pv specified doesn't exist or if the PV is part of another VG
             if (command.indexOf("vgextend ") != -1)
             {
+                boolean error = false;
+                String info = command.substring(command.indexOf(" ") + 1);
+                String volumeName = info.substring(0, info.indexOf(" "));
+                String physicalName = info.substring(info.indexOf(" ") + 1);
+                VolumeGroup group = null;
+                PhysicalVolume volume = null;
 
+                for (PhysicalVolume pv : physicalVolumes)
+                {
+                    if (pv.getName().equals(physicalName))
+                    {
+                        volume = pv;
+                    }
+                }
+
+                for (VolumeGroup vg : volumeGroups)
+                {
+                    if (vg.getName().equals(volumeName))
+                    {
+                        group = vg;
+                        break;
+                    }
+
+                    for (PhysicalVolume pv : vg.getPVList())
+                    {
+                        if (volume.equals(pv))
+                        {
+                            System.out.println("That physical volume is already associated with a created volume group");
+                            error = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (volumeGroups.size() == 0 || group == null)
+                {
+                    System.out.println("That volume group doesn't exist");
+                    error = true;
+                }
+
+                if (physicalVolumes.size() == 0 || volume == null)
+                {
+                    System.out.println("That physical volume doesn't exist");
+                    error = true;
+                }
+
+                if (error == false)
+                {
+                    for (int i = 0; i < volumeGroups.size(); i++)
+                    {
+                        if (volumeGroups.get(i).getName().equals(volumeName))
+                        {
+                            volumeGroups.get(i).extendPVList(volume);
+                            System.out.println(volumeGroups.get(i).getName() + " extended");
+                            break;
+                        }
+                    }
+                }
             }
 
+            // This command will list information about all the VGs in this format:
+            // vg1: total:[300G] available:[120G] [pv1,pv2] [uuid]
+            // This means vg1 has a total of 300G, with 120G available and contains the PVs pv1 and pv2.
             if (command.indexOf("vglist") != -1)
             {
 
