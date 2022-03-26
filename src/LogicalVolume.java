@@ -12,6 +12,11 @@ public class LogicalVolume extends LVMSystem {
         this.vg = vg;
     }
 
+    public VolumeGroup getVolumeGroup()
+    {
+        return this.vg;
+    }
+
     public int getSize()
     {
         return this.size;

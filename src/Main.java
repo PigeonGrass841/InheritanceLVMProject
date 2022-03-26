@@ -198,7 +198,7 @@ public class Main {
 
                 if (error == false)
                 {
-                    VolumeGroup group = new VolumeGroup(volumeName, volume);
+                    VolumeGroup group = new VolumeGroup(volumeName, volume, logicalVolumes);
                     volumeGroups.add(group);
                     System.out.println(volumeName + " created");
                 }
@@ -273,9 +273,28 @@ public class Main {
             // This means vg1 has a total of 300G, with 120G available and contains the PVs pv1 and pv2.
             if (command.indexOf("vglist") != -1)
             {
+                for (VolumeGroup vg : volumeGroups)
+                {
+                    System.out.print(vg.getName() + ": total:[" + vg.getSize() + "] available:[" + vg.getFreeSpace() + "]");
+                    System.out.print(" [" + vg.getPVList().get(0).getName());
 
+                    if (vg.getPVList().size() > 1)
+                    {
+                        for (int i = 1; i < vg.getPVList().size() - 1; i++)
+                        {
+                            System.out.print(", " + vg.getPVList().get(i).getName());
+                        }
+                        System.out.print(", " + vg.getPVList().get(vg.getPVList().size() - 1).getName());
+                    }
+
+                    System.out.println("] [" + vg.getUUID() + "]");
+                }
             }
 
+            // This command will create an LV named "lv1" with the size of 50G inside the volume group "vg1"
+            // This should only allow you to do this if there is enough space in the VG and should report an error if
+            // the vg name doesn't exist or doesn't have enough space.
+            // It should also report an error if the LV name already exists.
             if (command.indexOf("lvcreate ") != -1)
             {
 
