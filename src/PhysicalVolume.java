@@ -5,20 +5,20 @@
 // A physical hard drive can only belong to one physical volume.
 
 public class PhysicalVolume extends LVMSystem {
-    private HardDrive hardDrive;
+    private HardDrive hardDrive; // Associated hard drive
 
-    public PhysicalVolume (String name, HardDrive hardDrive)
+    public PhysicalVolume (String name, HardDrive hardDrive) // Constructor for a physical volume
     {
         super(name);
         this.hardDrive = hardDrive;
     }
 
-    public HardDrive getHardDrive()
+    public HardDrive getHardDrive() // Return associated hard drive
     {
         return this.hardDrive;
     }
 
-    public int getSize()
+    public int getSize() // Returns the size of the associated hard drive
     {
         return hardDrive.getSize();
     }

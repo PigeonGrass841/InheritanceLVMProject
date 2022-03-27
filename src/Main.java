@@ -20,10 +20,10 @@ public class Main {
         System.out.println("Welcome to the LVM System! Enter your commands: ");
         System.out.print("cmd# ");
 
-        ArrayList<HardDrive> hardDrives = new ArrayList<HardDrive>();
-        ArrayList<PhysicalVolume> physicalVolumes = new ArrayList<PhysicalVolume>();
-        ArrayList<VolumeGroup> volumeGroups = new ArrayList<VolumeGroup>();
-        ArrayList<LogicalVolume> logicalVolumes = new ArrayList<LogicalVolume>();
+        ArrayList<HardDrive> hardDrives = new ArrayList<HardDrive>(); // List of hard-drives
+        ArrayList<PhysicalVolume> physicalVolumes = new ArrayList<PhysicalVolume>(); // List of physical volumes
+        ArrayList<VolumeGroup> volumeGroups = new ArrayList<VolumeGroup>(); // List of volume groups
+        ArrayList<LogicalVolume> logicalVolumes = new ArrayList<LogicalVolume>(); // List of logical volumes
 
         Scanner input = new Scanner(System.in);
         String command = input.nextLine();

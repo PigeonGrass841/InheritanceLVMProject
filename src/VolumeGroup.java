@@ -6,13 +6,13 @@
 import java.util.ArrayList;
 
 public class VolumeGroup extends LVMSystem {
-    private ArrayList<PhysicalVolume> pvList = new ArrayList<PhysicalVolume>();
-    private ArrayList<LogicalVolume> lvList = new ArrayList<LogicalVolume>();
-    private PhysicalVolume physicalVolume;
-    private int size = 0;
-    private int freeSpace = 0;
+    private ArrayList<PhysicalVolume> pvList = new ArrayList<PhysicalVolume>(); // List of associated physical volumes
+    private ArrayList<LogicalVolume> lvList = new ArrayList<LogicalVolume>(); // List of associated logical volumes
+    private PhysicalVolume physicalVolume; // associated physical volume
+    private int size = 0; // Size of the volume group
+    private int freeSpace = 0; // Amount of free space
 
-    public VolumeGroup (String name, PhysicalVolume physicalVolume, ArrayList<LogicalVolume> lvlist)
+    public VolumeGroup (String name, PhysicalVolume physicalVolume, ArrayList<LogicalVolume> lvlist) // Constructor for a volume group
     {
         super(name);
         this.pvList.add(physicalVolume);
@@ -38,31 +38,31 @@ public class VolumeGroup extends LVMSystem {
         this.freeSpace = this.size - this.freeSpace;
     }
 
-    public void extendPVList(PhysicalVolume pv)
+    public void extendPVList(PhysicalVolume pv) // Adds an associated physical volume to pvList and sets the volume group's size and amount of free space
     {
         this.pvList.add(pv);
         setSize();
         setFreeSpace();
     }
 
-    public ArrayList<PhysicalVolume> getPVList()
+    public ArrayList<PhysicalVolume> getPVList() // Returns a list of associated physical volumes
     {
         return this.pvList;
     }
 
-    public void extendLVList(LogicalVolume lv)
+    public void extendLVList(LogicalVolume lv) // Adds an associated logical volume to lvList and sets the volume group's size and amount of free space
     {
         this.lvList.add(lv);
         setSize();
         setFreeSpace();
     }
 
-    public ArrayList<LogicalVolume> getLVList()
+    public ArrayList<LogicalVolume> getLVList() // Returns a list of associated logical volumes
     {
         return this.lvList;
     }
 
-    public void setFreeSpace()
+    public void setFreeSpace() // Sets freeSpace to the amount of free space in the volume group
     {
         this.freeSpace = 0;
         for (LogicalVolume lv : this.lvList)
@@ -72,12 +72,12 @@ public class VolumeGroup extends LVMSystem {
         this.freeSpace = this.size - this.freeSpace;
     }
 
-    public int getFreeSpace()
+    public int getFreeSpace() // Returns the amount of free space
     {
         return this.freeSpace;
     }
 
-    public void setSize()
+    public void setSize() // Sets size to the size of the volume group
     {
         this.size = 0;
         for (PhysicalVolume pv : this.pvList)
@@ -86,7 +86,7 @@ public class VolumeGroup extends LVMSystem {
         }
     }
 
-    public int getSize()
+    public int getSize() // Returns the size of the volume group
     {
         return this.size;
     }

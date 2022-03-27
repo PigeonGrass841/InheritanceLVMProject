@@ -1,0 +1,108 @@
+LVMSystem class
+
+Instance Variables:
+    private String name - This string represents the name of a piece of the LVM System
+    private String UUIDName - This string represents a randomly generated UUID
+
+Constructor
+    public LVMSystem (String name)
+
+Methods
+
+public String getName()
+    This method will return the name of a piece of the LVM System
+
+public String getUUID()
+    This method will return the UUIDName of a piece of the LVM System
+
+HardDrive class extends LVMSystem
+
+Instance Variables:
+    private int size - This integer represents the size of the hard drive
+
+Constructor
+   public HardDrive(String name, int size)
+
+Methods
+
+public int getSize()
+    This method will return the size of the hard drive
+
+PhysicalVolume class extends LVMSystem
+
+Instance Variables:
+    private HardDrive hardDrive - This hard drive represents the associated hard drive
+
+Constructor
+    public PhysicalVolume (String name, HardDrive hardDrive)
+
+Methods
+
+public HardDrive getHardDrive()
+    This method will return the associated hard drive
+
+pubblic int getSize()
+    This method will return the size of the physical volume
+
+VolumeGroup class extends LVMSystem
+
+Instance Variables:
+    private ArrayList<PhysicalVolume> pvList - This array list represents a list of associated physical volumes
+    private ArrayList<LogicalVolume> lvList - This array list represents a list of associated logical volumes
+    private PhysicalVolume physicalVolume - This physical volume represents the associated physical volume
+    private int size - This integer represents the size of the volume group
+    private int freeSpace - This integer represents the amount of free space in the volume group
+
+Constructor
+    public VolumeGroup (String name, PhysicalVolume physicalVolume, ArrayList<LogicalVolume> lvlist)
+
+Methods
+
+public void extendPVList(PhysicalVolume pv)
+    This method will add an associated physical volume to pvList and set the size and amount of free space in a volume group
+
+public ArrayList<PhysicalVolume> getPVList()
+    This method will return a list of associated physical volumes
+
+public void extendLVList(LogicalVolume lv)
+    This method will add an associated logical volume to lvList and set the size and amount of free space in a volume group
+
+public ArrayList<LogicalVolume> getLVList()
+    This method will return a list of associated logical volumes
+
+public void setFreeSpace()
+    This method will set freeSpace to the amount of free space in the volume group
+
+public int getFreeSpace()
+    This method will return the amount of free space in the volume group
+
+public void setSize()
+    This method will set size to the size of the volume group
+
+public int getSize()
+    This method will return the size of the volume group
+
+LogicalVolume class extends LVMSystem
+
+Instance Variables:
+    private VolumeGroup vg - This volume group represents the associated volume group
+    private int size - This integer represents the size of the logical volume
+
+Constructor
+    public LogicalVolume (String name, int size, VolumeGroup vg)
+
+Methods
+
+public VolumeGroup getVolumeGroup()
+    This method will return the associated volume group
+
+public int getSize()
+    This method will return the size of the logical volume
+
+Main.java
+
+Step 1: Create various array lists for hard drives, physical volumes, volume groups, and logical volumes.
+Step 2: Show a list of possible commands and prompt the user to enter a command.
+Step 3: If the user enters a command, using if statements, run the corresponding segment of code.
+Step 4: Until the user enters "exit", repeat steps 2 through 3.
+Step 5: Print the following statement "Saving data. Good bye!".
