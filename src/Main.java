@@ -14,7 +14,7 @@ public class Main {
         System.out.println(" - vgcreate [vg_name] [pv_name]");
         System.out.println(" - vgextend [vg_name] [pv_name]");
         System.out.println(" - vglist");
-        System.out.println(" - lvcreate [lv_size] [vg_name]");
+        System.out.println(" - lvcreate [lv_name] [lv_size] [vg_name]");
         System.out.println(" - lvlist");
         System.out.println("-------------------------");
         System.out.println("Welcome to the LVM System! Enter your commands: ");
@@ -230,7 +230,10 @@ public class Main {
                         group = vg;
                         break;
                     }
+                }
 
+                for (VolumeGroup vg : volumeGroups)
+                {
                     for (PhysicalVolume pv : vg.getPVList())
                     {
                         if (volume.equals(pv))
@@ -275,7 +278,7 @@ public class Main {
             {
                 for (VolumeGroup vg : volumeGroups)
                 {
-                    System.out.print(vg.getName() + ": total:[" + vg.getSize() + "] available:[" + vg.getFreeSpace() + "]");
+                    System.out.print(vg.getName() + ": total:[" + vg.getSize() + "G] available:[" + vg.getFreeSpace() + "G]");
                     System.out.print(" [" + vg.getPVList().get(0).getName());
 
                     if (vg.getPVList().size() > 1)
@@ -292,21 +295,83 @@ public class Main {
             }
 
             // This command will create an LV named "lv1" with the size of 50G inside the volume group "vg1"
-            // This should only allow you to do this if there is enough space in the VG and should report an error if
-            // the vg name doesn't exist or doesn't have enough space.
+            // This should only allow you to do this if there is enough space in the VG
+            // This should report an error if the vg name doesn't exist or doesn't have enough space.
             // It should also report an error if the LV name already exists.
             if (command.indexOf("lvcreate ") != -1)
             {
+                boolean error = false;
+                String info = command.substring(command.indexOf(" ") + 1);
+                String logicalName = info.substring(0, info.indexOf(" "));
+                info = info.substring(info.indexOf(" ") + 1);
+                String logicalSize = info.substring(0, info.indexOf(" "));
+                String groupName = info.substring(info.indexOf(" ") + 1);
+                VolumeGroup group = null;
 
+                if (logicalSize.indexOf("G") != -1)
+                {
+                    logicalSize = logicalSize.substring(0, logicalSize.indexOf("G"));
+                }
+
+                for (VolumeGroup vg : volumeGroups)
+                {
+                    if (vg.getName().equals(groupName))
+                    {
+                        group = vg;
+                    }
+                }
+
+                if (volumeGroups.size() == 0 || group == null)
+                {
+                    System.out.println("That volume group doesn't exist");
+                    error = true;
+                }
+
+                if (group != null && group.getFreeSpace() < Integer.parseInt(logicalSize))
+                {
+                    System.out.println("That volume group doesn't have enough space");
+                    error = true;
+                }
+
+                for (LogicalVolume lv : logicalVolumes)
+                {
+                    if (lv.getName().equals(logicalName))
+                    {
+                        System.out.println("That logical volume already exists");
+                        error = true;
+                    }
+                }
+
+                if (error == false)
+                {
+                    LogicalVolume volume = new LogicalVolume(logicalName, Integer.parseInt(logicalSize), group);
+                    logicalVolumes.add(volume);
+
+                    for (int i = 0; i < volumeGroups.size(); i++)
+                    {
+                        if (volumeGroups.get(i).getName().equals(volume.getVolumeGroup().getName()))
+                        {
+                            volumeGroups.get(i).extendLVList(volume);
+                        }
+                    }
+
+                    System.out.println(logicalName + " created");
+                }
             }
 
+            // This command should list the information about all logical volumes (sorted by volume group) created in this format:
+            // lv1: [50G] [vg1] [uuid]
             if (command.indexOf("lvlist") != -1)
             {
-
+                for (LogicalVolume lv : logicalVolumes)
+                {
+                    System.out.println(lv.getName() + ": [" + lv.getSize() + "G] [" + lv.getVolumeGroup().getName() + "] [" + lv.getUUID() + "]");
+                }
             }
 
             System.out.print("cmd# ");
             command = input.nextLine();
         }
+        System.out.println("Saving data. Good bye!");
     }
 }

@@ -9,8 +9,8 @@ public class VolumeGroup extends LVMSystem {
     private ArrayList<PhysicalVolume> pvList = new ArrayList<PhysicalVolume>();
     private ArrayList<LogicalVolume> lvList = new ArrayList<LogicalVolume>();
     private PhysicalVolume physicalVolume;
-    private int size;
-    private int freeSpace;
+    private int size = 0;
+    private int freeSpace = 0;
 
     public VolumeGroup (String name, PhysicalVolume physicalVolume, ArrayList<LogicalVolume> lvlist)
     {
@@ -35,12 +35,14 @@ public class VolumeGroup extends LVMSystem {
             this.freeSpace += lv.getSize();
         }
 
-        this.freeSpace = this.freeSpace - size;
+        this.freeSpace = this.size - this.freeSpace;
     }
 
     public void extendPVList(PhysicalVolume pv)
     {
         this.pvList.add(pv);
+        setSize();
+        setFreeSpace();
     }
 
     public ArrayList<PhysicalVolume> getPVList()
@@ -51,6 +53,8 @@ public class VolumeGroup extends LVMSystem {
     public void extendLVList(LogicalVolume lv)
     {
         this.lvList.add(lv);
+        setSize();
+        setFreeSpace();
     }
 
     public ArrayList<LogicalVolume> getLVList()
@@ -60,11 +64,12 @@ public class VolumeGroup extends LVMSystem {
 
     public void setFreeSpace()
     {
-        for (LogicalVolume lv : lvList)
+        this.freeSpace = 0;
+        for (LogicalVolume lv : this.lvList)
         {
             this.freeSpace += lv.getSize();
         }
-        this.freeSpace = this.freeSpace - size;
+        this.freeSpace = this.size - this.freeSpace;
     }
 
     public int getFreeSpace()
@@ -74,9 +79,10 @@ public class VolumeGroup extends LVMSystem {
 
     public void setSize()
     {
-        for (PhysicalVolume pv : pvList)
+        this.size = 0;
+        for (PhysicalVolume pv : this.pvList)
         {
-            size += pv.getSize();
+            this.size += pv.getSize();
         }
     }
 
